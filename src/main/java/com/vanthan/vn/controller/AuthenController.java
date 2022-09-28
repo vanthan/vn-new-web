@@ -19,7 +19,7 @@ public class AuthenController {
         return "authen/login";
     }
 
-    @GetMapping(value = "login")
+    @GetMapping(value = "register")
     public String register(HttpServletRequest request){
         return "authen/register";
     }
