@@ -22,11 +22,22 @@ public class AuthenService implements IAuthen {
 
     @Override
     public BaseResponse<LoginResponse> login(LoginRequest request) {
+        ResponseEntity<BaseResponse<LoginResponse>> response = null;
         //call back-end
+        String url = baseUrl + "/login";
         log.info("Request body {}", CommonUtil.convertFromObject(request));
 
-
-        return null;
+        try {
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            HttpEntity<LoginRequest> requestUpdate = new HttpEntity<>(request, headers);
+            response = restTemplate.exchange(url, HttpMethod.POST, requestUpdate, new ParameterizedTypeReference<BaseResponse<LoginResponse>>() {});
+            log.info("Response body {}", response.getBody());
+        }catch (RestClientException e){
+            log.error("Error {}", e.getMessage());
+        }
+        return response.getBody();
     }
 
     @Override

@@ -24,6 +24,7 @@
             </div>
         </div>
     </div>
+    <script src="<c:url value="/resources/js/jquery-3.6.1.min.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.bundle.js" />"></script>
     <script src="<c:url value="/resources/js/bootstrap.esm.js" />"></script>

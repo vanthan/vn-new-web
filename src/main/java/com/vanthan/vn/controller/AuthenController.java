@@ -1,14 +1,13 @@
 package com.vanthan.vn.controller;
 
-import com.vanthan.vn.dto.BaseResponse;
-import com.vanthan.vn.dto.LoginRequest;
-import com.vanthan.vn.dto.RegisterRequest;
-import com.vanthan.vn.dto.RegisterResponse;
+import com.vanthan.vn.dto.*;
 import com.vanthan.vn.service.IAuthen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.view.RedirectView;
 
 import javax.servlet.http.HttpServletRequest;
@@ -47,30 +46,54 @@ public class AuthenController {
         return "authen/register";
     }
 
-    @PostMapping(value = "do/register")
-    public RedirectView doRegister(HttpServletRequest request){
+    @PostMapping(value = "login")
+    public RedirectView doLogin(HttpServletRequest request, RedirectAttributes redirectAttributes){
+        final RedirectView redirectView = new RedirectView("/dashboard", false);
+        final RedirectView redirectView2 = new RedirectView("/login", true);
+
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
+        LoginRequest login = new LoginRequest();
+        login.setEmail(email);
+        login.setPassword(password);
+
+        BaseResponse<LoginResponse> response =  iAuthen.login(login);
+        if (!response.getCode().equals("00") && !response.getMessage().equals("Success")){
+            redirectAttributes.addFlashAttribute("message",response.getMessage());
+            return redirectView2;
+        }
+        return redirectView;
+    }
+
+    @PostMapping(value = "register")
+    public RedirectView doRegister(HttpServletRequest request, RedirectAttributes redirectAttributes){
+        final RedirectView redirectView = new RedirectView("/dashboard", false);
+        final RedirectView redirectView2 = new RedirectView("/register", true);
         String fullName = request.getParameter("fullName");
         String email = request.getParameter("email");
         String password = request.getParameter("password");
+        String username = request.getParameter("username");
         String repeatPassword = request.getParameter("repeatPassword");
 
         //check password
         if(!password.equals(repeatPassword)){
-
+            redirectAttributes.addFlashAttribute("message","Mật khẩu không đúng");
+            return redirectView2;
         }
 
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setEmail(email);
         registerRequest.setPassword(password);
+        registerRequest.setUsername(username);
         registerRequest.setFullName(fullName);
 
         //register
-//        BaseResponse<RegisterResponse> response =  iAuthen.register(registerRequest);
+        BaseResponse<RegisterResponse> response =  iAuthen.register(registerRequest);
 
-//        if (!response.getCode().equals("00") && !response.getMessage().equals("Success")){
-//
-//        }
-
-        return new RedirectView("/dashboard");
+        if (!response.getCode().equals("00") && !response.getMessage().equals("Success")){
+            redirectAttributes.addFlashAttribute("message",response.getMessage());
+            return redirectView2;
+        }
+        return redirectView;
     }
 }

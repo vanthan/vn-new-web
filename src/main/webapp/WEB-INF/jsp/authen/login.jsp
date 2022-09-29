@@ -11,10 +11,16 @@
 <head>
     <title>Login</title>
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 <body>
     <main>
+        <c:if test="${not empty message}">
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Error!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </c:if>
         <div class="container">
             <section class="vh-100">
                 <div class="container-fluid h-custom">
@@ -24,7 +30,7 @@
                                  class="img-fluid" alt="Sample image">
                         </div>
                         <div class="col-md-8 col-lg-6 col-xl-4 offset-xl-1">
-                            <form>
+                            <form action="/login" method="post">
                                 <div class="d-flex flex-row align-items-center justify-content-center justify-content-lg-start">
                                     <p class="lead fw-normal mb-0 me-3">Sign in with</p>
                                     <button type="button" class="btn btn-primary btn-floating mx-1">
@@ -46,16 +52,16 @@
 
                                 <!-- Email input -->
                                 <div class="form-outline mb-4">
-                                    <input type="email" id="form3Example3" class="form-control form-control-lg"
+                                    <input type="email" id="email" name="email" class="form-control form-control-lg"
                                            placeholder="Enter a valid email address" />
-                                    <label class="form-label" for="form3Example3">Email address</label>
+                                    <label class="form-label">Email address</label>
                                 </div>
 
                                 <!-- Password input -->
                                 <div class="form-outline mb-3">
-                                    <input type="password" id="form3Example4" class="form-control form-control-lg"
+                                    <input type="password" id="password" name="password" class="form-control form-control-lg"
                                            placeholder="Enter password" />
-                                    <label class="form-label" for="form3Example4">Password</label>
+                                    <label class="form-label">Password</label>
                                 </div>
 
                                 <div class="d-flex justify-content-between align-items-center">
@@ -70,7 +76,7 @@
                                 </div>
 
                                 <div class="text-center text-lg-start mt-4 pt-2">
-                                    <button type="button" class="btn btn-primary btn-lg"
+                                    <button type="submit" class="btn btn-primary btn-lg"
                                             style="padding-left: 2.5rem; padding-right: 2.5rem;">Login</button>
                                     <p class="small fw-bold mt-2 pt-1 mb-0">Don't have an account? <a href="/register"
                                                                                                       class="link-danger">Register</a></p>
@@ -108,5 +114,9 @@
             </section>
         </div>
     </main>
+    <script src="<c:url value="/resources/js/jquery-3.6.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.bundle.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.esm.js" />"></script>
 </body>
 </html>

@@ -11,10 +11,19 @@
 <head>
     <title>Register</title>
     <link href="<c:url value="/resources/css/bootstrap.css" />" rel="stylesheet">
-    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
+    <link href="<c:url value="/resources/css/bootstrap.rtl.css" />" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
 </head>
 <body>
+    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
     <main>
+
+        <c:if test="${not empty message}">
+            <div class="alert alert-danger alert-dismissible fade show">
+                <strong>Error!</strong> ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        </c:if>
         <div class="container">
             <section class="vh-100" style="background-color: #eee;">
                 <div class="container h-100">
@@ -27,7 +36,7 @@
 
                                             <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
 
-                                            <form class="mx-1 mx-md-4" action="/do/register" method="post">
+                                            <form class="mx-1 mx-md-4" action="/register" method="post">
 
                                                 <div class="d-flex flex-row align-items-center mb-4">
                                                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
@@ -42,6 +51,14 @@
                                                     <div class="form-outline flex-fill mb-0">
                                                         <input type="email" id="email" name="email" class="form-control" />
                                                         <label class="form-label" >Your Email</label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex flex-row align-items-center mb-4">
+                                                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
+                                                    <div class="form-outline flex-fill mb-0">
+                                                        <input type="text" id="username" name="username" class="form-control" />
+                                                        <label class="form-label" >User Name</label>
                                                     </div>
                                                 </div>
 
@@ -90,6 +107,16 @@
             </section>
         </div>
     </main>
-
+    <script src="<c:url value="/resources/js/jquery-3.6.1.min.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.bundle.js" />"></script>
+    <script src="<c:url value="/resources/js/bootstrap.esm.js" />"></script>
+    <script type="text/javascript">
+        window.setTimeout(function() {
+            $(".alert").fadeTo(500, 0).slideUp(500, function(){
+                $(this).remove();
+            });
+        }, 4000);
+    </script>
 </body>
 </html>
