@@ -4,7 +4,6 @@ import com.vanthan.vn.dto.*;
 import com.vanthan.vn.service.IAuthen;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -13,7 +12,7 @@ import org.springframework.web.servlet.view.RedirectView;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
-public class AuthenController {
+public class AuthenController extends AbtractController{
 
     @Autowired
     private IAuthen iAuthen;
@@ -62,6 +61,11 @@ public class AuthenController {
             redirectAttributes.addFlashAttribute("message",response.getMessage());
             return redirectView2;
         }
+
+        String tocken = response.getBody().getTocken();
+
+        // save token into memory
+        saveToken.put("token", tocken);
         return redirectView;
     }
 
