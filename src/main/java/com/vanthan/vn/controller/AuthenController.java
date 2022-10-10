@@ -62,10 +62,10 @@ public class AuthenController extends AbtractController{
             return redirectView2;
         }
 
-        String tocken = response.getBody().getTocken();
+        String token = response.getBody().getToken();
 
         // save token into memory
-        saveToken.put("token", tocken);
+        saveToken.put("token", token);
         return redirectView;
     }
 

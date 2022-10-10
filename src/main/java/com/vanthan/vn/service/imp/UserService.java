@@ -17,9 +17,10 @@ public class UserService implements IUser {
 
     @Value("${base.url.authen}")
     private String baseUrl;
-
+    RestTemplate restTemplate = new RestTemplate();
+    HttpHeaders headers = new HttpHeaders();
     @Override
-    public BaseResponse<UserResponse> getUser(GetUserRequest request) {
+    public BaseResponse<UserResponse> getUser(GetUserRequest request,String token) {
 
         ResponseEntity<BaseResponse<UserResponse>> response = null;
         //call back-end
@@ -27,9 +28,8 @@ public class UserService implements IUser {
         log.info("Request body {}", CommonUtil.convertFromObject(request));
 
         try {
-            RestTemplate restTemplate = new RestTemplate();
-            HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(token);
             HttpEntity<GetUserRequest> requestUpdate = new HttpEntity<>(request, headers);
             response = restTemplate.exchange(url, HttpMethod.POST, requestUpdate, new ParameterizedTypeReference<BaseResponse<UserResponse>>() {});
             log.info("Response body {}", response.getBody());
@@ -37,5 +37,24 @@ public class UserService implements IUser {
             log.error("Error {}", e.getMessage());
         }
         return response.getBody();
+    }
+
+    @Override
+    public BaseResponse addCustomer(AddCustomerRequest request, String token) {
+        ResponseEntity<BaseResponse> response = null;
+        String url = baseUrl + "/saveCustomer";
+        log.info("Request body {}", CommonUtil.convertFromObject(request));
+
+        try {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(token);
+            HttpEntity<AddCustomerRequest> requestUpdate = new HttpEntity<>(request, headers);
+            response = restTemplate.exchange(url, HttpMethod.POST, requestUpdate, new ParameterizedTypeReference<BaseResponse>() {});
+            log.info("Response body {}", response.getBody());
+        }catch (RestClientException e){
+            log.error("Error {}", e.getMessage());
+        }
+        return response.getBody();
+
     }
 }
