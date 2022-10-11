@@ -20,12 +20,12 @@
                 <b>Edit Product</b>
             </h2>
             <form action="/edit-products" method="post">
-                <input type="hidden" id="sname" name="id" value="${product.id}">
-                <label path="sku">SKU</label><br>
+                <input type="hidden" id="iname" name="id" value="${product.id}">
+                <label for="sname"><b>SKU</b></label><br>
                 <input type="text" id="sname" name="sku" value="${product.sku}"><br>
-                <label for="lname">NAME</label><br>
+                <label for="lname"><b>NAME</b></label><br>
                 <input type="text" id="lname" name="name" value="${product.name}"><br>
-                <label for="qname">QUANTITY</label><br>
+                <label for="qname"><b>QUANTITY</b></label><br>
                 <input type="text" id="qname" name="quantity" value="${product.quantity}"><br><br>
                 <input type="submit" value="Submit">
                 </input>

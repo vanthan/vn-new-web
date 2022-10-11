@@ -19,15 +19,15 @@ import javax.persistence.criteria.CriteriaBuilder;
 @Log4j2
 public class ProductService implements iProduct {
 
-    @Value("http://localhost:8080")
+    @Value("${base.url.authen}")
     private String baseUrl;
 
     @Override
-    public BaseResponse<DataProduct> getProduct(Paging request, String token) {
+    public BaseResponse<DataProduct> getProduct(String keyword, Paging request, String token) {
 
         ResponseEntity<BaseResponse<DataProduct>> response = null;
         //call back-end
-        String url = baseUrl + "/getProducts";
+        String url = baseUrl + "/search?name=" + keyword;
         log.info("Request body {}", CommonUtil.convertFromObject(request));
 
         RestTemplate restTemplate = new RestTemplate();

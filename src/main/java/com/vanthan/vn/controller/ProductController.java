@@ -27,15 +27,28 @@ public class ProductController extends AbtractController {
     private String baseUrl;
 
     @GetMapping(value = "/products")
-    public String getProduct(Paging request, Model model){
+    public String getProduct(Paging request, Model model, HttpServletRequest req){
 
         String token = saveToken.get("token");
+        String pageNum = req.getParameter("pageNum");
+        String keyword = (String) req.getAttribute("keyword");
+        if(pageNum == null){
+            pageNum = "0";
+        }
 
-        request.setPageNum(0);
-        request.setTotalNum(10);
+        if(keyword == null){
+            keyword = "";
+        }
+        request.setPageNum(Integer.valueOf(pageNum));
+        request.setTotalNum(5);
 
-        BaseResponse<DataProduct> response = productService.getProduct(request, token);
+        BaseResponse<DataProduct> response = productService.getProduct(keyword,request, token);
         model.addAttribute("listProducts", response.getBody().getContent());
+
+        req.setAttribute("endP", response.getBody().getTotalPages());
+        req.setAttribute("totalElements", response.getBody().getTotalElements());
+        req.setAttribute("tag", pageNum);
+        req.setAttribute("totalNum", 5);
 
         return "products/product";
     }

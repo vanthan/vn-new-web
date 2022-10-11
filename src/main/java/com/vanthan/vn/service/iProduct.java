@@ -7,7 +7,7 @@ import com.vanthan.vn.dto.ProductItem;
 
 public interface iProduct {
 
-    BaseResponse<DataProduct> getProduct(Paging request, String token);
+    BaseResponse<DataProduct> getProduct(String keyword,Paging request, String token);
 
     void saveProduct(ProductItem productItem, String token);
 

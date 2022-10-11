@@ -29,6 +29,51 @@
         tr:nth-child(even) {
             background-color: #dddddd;
         }
+        .hint-text {
+            float: left;
+            margin-top: 10px;
+            font-size: 13px;
+        }
+        .pagination li a {
+            border: none;
+            font-size: 13px;
+            min-width: 30px;
+            min-height: 30px;
+            color: #999;
+            margin: 0 2px;
+            line-height: 30px;
+            border-radius: 2px !important;
+            text-align: center;
+            padding: 0 6px;
+        }
+
+        .pagination li a:hover {
+            color: #666;
+        }
+
+        .pagination li.active a, .pagination li.active a.page-link {
+            background: #03A9F4;
+        }
+
+        .pagination li.active a:hover {
+            background: #0397d6;
+        }
+
+        .pagination li.disabled i {
+            color: #ccc;
+        }
+
+        .pagination li i {
+            font-size: 16px;
+            padding-top: 6px
+        }
+        .clearfix{
+            padding-top: 9px;
+        }
+        .pagination{
+            padding-top: 4px;
+            float: right;
+        }
     </style>
 </head>
 <body>
@@ -53,20 +98,37 @@
                     <th>ACTIONS</th>
                 </tr>
                 <tr>
-                    <c:forEach var="products" items="${listProducts}">
-                <tr>
-                    <th scope="row">${products.id}</th>
-                    <td>${products.sku}</td>
-                    <td>${products.name}</td>
-                    <td>${products.quantity}</td>
-                    <td><div class="btn-group">
-                        <a href="/edit-products/${products.id}" class="btn btn-success">Sửa</a>
-                        <a href="/delete-products/${products.id}" class="btn btn-danger">Xóa</a>
-                    </div></td>
-                </tr>
+                 <c:forEach var="products" items="${listProducts}">
+                    <tr>
+                        <th>${products.id}</th>
+                        <td>${products.sku}</td>
+                        <td>${products.name}</td>
+                        <td>${products.quantity}</td>
+                        <td><div class="btn-group">
+                            <a href="/edit-products/${products.id}" class="btn btn-success">Sửa</a>
+                            <a href="/delete-products/${products.id}" class="btn btn-danger">Xóa</a>
+                        </div></td>
+                    </tr>
                 </c:forEach>
                 </tr>
             </table>
+            <div class="clearfix">
+                <div class="hint-text">
+                    Showing <b>${totalNum}</b> out of <b>${totalElements}</b> entries
+                </div>
+                <ul class="pagination">
+                    <li class="page-item disabled" class="page-link"><a href="#">Previous</a></li>
+                        <c:forEach begin="0" end="${endP}" var = "i">
+                            <li class="page-item ${tag == i?"active":""}"><a href="/products?pageNum=${i}" class="page-link">${i}</a></li>
+                        </c:forEach>
+                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <%--<li class="page-item"><a href="#" class="page-link">2</a></li>
+                    <li class="page-item active"><a href="#" class="page-link">3</a></li>
+                    <li class="page-item"><a href="#" class="page-link">4</a></li>
+                    <li class="page-item"><a href="#" class="page-link">5</a></li>--%>
+
+                </ul>
+            </div>
         </div>
     </div>
 </div>
