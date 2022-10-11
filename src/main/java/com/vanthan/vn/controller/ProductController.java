@@ -31,7 +31,7 @@ public class ProductController extends AbtractController {
 
         String token = saveToken.get("token");
         String pageNum = req.getParameter("pageNum");
-        String keyword = (String) req.getAttribute("keyword");
+        String keyword = req.getParameter("keyword");
         if(pageNum == null){
             pageNum = "0";
         }
@@ -49,6 +49,7 @@ public class ProductController extends AbtractController {
         req.setAttribute("totalElements", response.getBody().getTotalElements());
         req.setAttribute("tag", pageNum);
         req.setAttribute("totalNum", 5);
+        req.setAttribute("keyword", keyword);
 
         return "products/product";
     }

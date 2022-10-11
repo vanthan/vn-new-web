@@ -84,11 +84,14 @@
             <h2>
                 <b>Danh sách sản phẩm</b>
             </h2>
-            <a class="btn btn-warning" href="/saveProduct">Thêm
-                sản phẩm</b>
-            </a> <input type="text" id="keyword" placeholder="Tìm kiếm"
-                        name="keyword" value="${keyword}">
-            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+            <form action="/products" method="get">
+                <input style="height: 37px; padding-bottom: 9px" type="text" id="keyword" placeholder="Tìm kiếm"
+                            name="keyword" value="${keyword}">
+                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                <a style="float: right;" class="btn btn-warning" href="/saveProduct">Thêm
+                    sản phẩm</a>
+            </form>
+
             <table>
                 <tr>
                     <th>Id</th>
