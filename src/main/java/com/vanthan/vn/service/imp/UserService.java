@@ -57,4 +57,42 @@ public class UserService implements IUser {
         return response.getBody();
 
     }
+
+    @Override
+    public BaseResponse<UserResponse> searchUser(GetUserRequest request, String token, String userName) {
+        ResponseEntity<BaseResponse<UserResponse>> response = null;
+        //call back-end
+        String url = baseUrl + "/search-userName?userName="+userName;
+        log.info("Request body {}", CommonUtil.convertFromObject(request));
+
+        try {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(token);
+            HttpEntity<GetUserRequest> requestUpdate = new HttpEntity<>(request, headers);
+            response = restTemplate.exchange(url, HttpMethod.POST, requestUpdate, new ParameterizedTypeReference<BaseResponse<UserResponse>>() {});
+            log.info("Response body {}", response.getBody());
+        }catch (RestClientException e){
+            log.error("Error {}", e.getMessage());
+        }
+        return response.getBody();
+    }
+
+    @Override
+    public BaseResponse deleteUser(String token, String id) {
+        ResponseEntity<BaseResponse> response = null;
+        String url = baseUrl + "/deleteCustomer/"+id;
+        log.info("Request body {}", id);
+
+        try {
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            headers.setBearerAuth(token);
+            response = restTemplate.exchange(url, HttpMethod.DELETE, null, new ParameterizedTypeReference<BaseResponse>() {});
+            log.info("Response body {}", response.getBody());
+            return response.getBody();
+        }catch (RestClientException e){
+            log.error("Error {}", e.getMessage());
+            return null;
+        }
+
+    }
 }

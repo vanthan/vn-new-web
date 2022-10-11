@@ -68,4 +68,32 @@ public class UserController extends AbtractController{
         return redirectView;
     }
 
+    @PostMapping("user/search")
+    public RedirectView searchUser(HttpServletRequest request, Model model){
+        RedirectView redirectView = new RedirectView("/user", false);
+        String userName = request.getParameter("search_user");
+
+        GetUserRequest getUserRequest = new GetUserRequest();
+        getUserRequest.setPageNum(0);
+        getUserRequest.setTotalNum(10);
+        String token = saveToken.get("token");
+        BaseResponse<UserResponse> response = iUser.searchUser(getUserRequest, token,userName);
+
+        model.addAttribute("userPage", response.getBody().getContent());
+        return redirectView;
+    }
+
+    @PostMapping("user/delete")
+    public RedirectView delete(HttpServletRequest request, RedirectAttributes redirectAttributes){
+        RedirectView redirectView = new RedirectView("/user", false);
+        String idUser = request.getParameter("idUser");
+
+        String token = saveToken.get("token");
+        BaseResponse<UserResponse> response = iUser.deleteUser(token,idUser);
+
+        if (!response.getCode().equals("00") && !response.getMessage().equals("Success")){
+            redirectAttributes.addFlashAttribute("message","Thanh Công");
+        }
+        return redirectView;
+    }
 }

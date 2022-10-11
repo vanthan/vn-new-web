@@ -28,12 +28,21 @@
             <%@include file="../layout/menu.jsp" %>
             <%@include file="../layout/addcustomer.jsp" %>
             <div class="row">
-                <div class="col col-sm-12 legend">
+                <div class="col col-sm-10 legend">
 
-                    <div class="row">
-                        <div class="input-group py-4 col-sm-8">
-                            <input class="form-control" type="text" placeholder="Search" aria-label="Search">
-                        </div>
+                    <div class="row py-4">
+
+                        <form action="/user/search" method="post">
+                            <div class="input-group">
+                                <div class="form-outline">
+                                    <input class="form-control" type="text" name="search_user" placeholder="Search">
+                                </div>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+
+                        </form>
                     </div>
                     <div class="row">
                         <div class="py-4 col-sm-8">
@@ -58,7 +67,11 @@
                             <td>${user.email}</td>
                             <td>${user.age}</td>
                             <td>
-
+                                <button type="button" class="btn btn-primary">Sửa</button>
+                                <form action="/user/delete" method="post">
+                                    <input name="idUser" type="hidden" value="${user.id}">
+                                    <button type="submit" class="btn btn-danger ">Xóa</button>
+                                </form>
                             </td>
                         </tr>
                         </c:forEach>
