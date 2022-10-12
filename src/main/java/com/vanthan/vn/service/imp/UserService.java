@@ -20,11 +20,11 @@ public class UserService implements IUser {
     RestTemplate restTemplate = new RestTemplate();
     HttpHeaders headers = new HttpHeaders();
     @Override
-    public BaseResponse<UserResponse> getUser(GetUserRequest request,String token) {
+    public BaseResponse<UserResponse> getUser(String keyword, GetUserRequest request,String token) {
 
         ResponseEntity<BaseResponse<UserResponse>> response = null;
         //call back-end
-        String url = baseUrl + "/getCustomer";
+        String url = baseUrl + "/search-userName?userName=" + keyword;
         log.info("Request body {}", CommonUtil.convertFromObject(request));
 
         try {
@@ -86,7 +86,8 @@ public class UserService implements IUser {
         try {
             headers.setContentType(MediaType.APPLICATION_JSON);
             headers.setBearerAuth(token);
-            response = restTemplate.exchange(url, HttpMethod.DELETE, null, new ParameterizedTypeReference<BaseResponse>() {});
+            HttpEntity<String> requestDeleteProduct = new HttpEntity<>(headers);
+            response = restTemplate.exchange(url, HttpMethod.DELETE, requestDeleteProduct, new ParameterizedTypeReference<BaseResponse>() {});
             log.info("Response body {}", response.getBody());
             return response.getBody();
         }catch (RestClientException e){
@@ -94,5 +95,35 @@ public class UserService implements IUser {
             return null;
         }
 
+    }
+
+    @Override
+    public BaseResponse<UserItem> editUser(UserItem userItem, String token) {
+        ResponseEntity<BaseResponse<UserItem>> response = null;
+        String url = baseUrl + "/updateCustomer";
+        log.info("Request body {}", CommonUtil.convertFromObject(userItem));
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<UserItem> requestSaveProduct = new HttpEntity<>(userItem, headers);
+        response = restTemplate.exchange(url, HttpMethod.PUT, requestSaveProduct,new ParameterizedTypeReference<BaseResponse<UserItem>>() {} );
+
+        return response.getBody();
+    }
+
+    @Override
+    public BaseResponse<UserItem> getUserDetailById(String id, String token) {
+        ResponseEntity<BaseResponse<UserItem>> response = null;
+        String url = baseUrl + "/customerDetail/" + id;
+        log.info("Request Body {}", id);
+
+        RestTemplate restTemplate = new RestTemplate();
+        HttpHeaders headers = new HttpHeaders();
+        headers.setBearerAuth(token);
+        HttpEntity<String> requestGetProduct = new HttpEntity<>(headers);
+        response = restTemplate.exchange(url, HttpMethod.GET, requestGetProduct,new ParameterizedTypeReference<BaseResponse<UserItem>>() {} );
+
+        return response.getBody();
     }
 }

@@ -77,6 +77,12 @@
     </style>
 </head>
 <body>
+<%
+    int numberOfElements=0;
+    int count = 1;
+    String tag = String.valueOf(request.getAttribute("tag"));
+    String totalNum = String.valueOf(request.getAttribute("totalNum"));
+%>
 <div class="container-fluid">
     <div class="row flex-nowrap">
         <%@include file="../layout/menu.jsp" %>
@@ -91,7 +97,6 @@
                 <a style="float: right;" class="btn btn-warning" href="/saveProduct">Thêm
                     sản phẩm</a>
             </form>
-
             <table>
                 <tr>
                     <th>Id</th>
@@ -102,8 +107,12 @@
                 </tr>
                 <tr>
                  <c:forEach var="products" items="${listProducts}">
+                    <%
+                         //Đếm số phần tử được hiển thị
+                         numberOfElements += 1;
+                    %>
                     <tr>
-                        <th>${products.id}</th>
+                        <td><%= Integer.parseInt(tag)*Integer.parseInt(totalNum)+count++ %></td>
                         <td>${products.sku}</td>
                         <td>${products.name}</td>
                         <td>${products.quantity}</td>
@@ -117,14 +126,18 @@
             </table>
             <div class="clearfix">
                 <div class="hint-text">
-                    Showing <b>${totalNum}</b> out of <b>${totalElements}</b> entries
+                    Showing <b><%=numberOfElements%></b> out of <b>${totalElements}</b> entries
                 </div>
                 <ul class="pagination">
-                    <li class="page-item disabled" class="page-link"><a href="#">Previous</a></li>
-                        <c:forEach begin="0" end="${endP}" var = "i">
-                            <li class="page-item ${tag == i?"active":""}"><a href="/products?pageNum=${i}" class="page-link">${i}</a></li>
+                    <c:if test="${tag+1 > 1}">
+                        <li class="page-item disabled" class="page-link"><a href="/products?pageNum=${tag-1}">Previous</a></li>
+                    </c:if>
+                        <c:forEach begin="1" end="${endP}" var = "i">
+                            <li class="page-item ${tag+1 == i?"active":""}"><a href="/products?pageNum=${i-1}" class="page-link">${i}</a></li>
                         </c:forEach>
-                    <li class="page-item"><a href="#" class="page-link">Next</a></li>
+                    <c:if test="${tag+1 < endP}">
+                        <li class="page-item"><a href="/products?pageNum=${tag + 1}" class="page-link">Next</a></li>
+                    </c:if>
                     <%--<li class="page-item"><a href="#" class="page-link">2</a></li>
                     <li class="page-item active"><a href="#" class="page-link">3</a></li>
                     <li class="page-item"><a href="#" class="page-link">4</a></li>
@@ -135,7 +148,10 @@
         </div>
     </div>
 </div>
-<script src="<c:url value="/resources/js/jquery-3.6.1.min.js" />"></script>
+<script src="<c:url value="/resources/js/jquery-3.6.1.min.js" />">
+
+    var u = $(e.currentTarget).closest('td').parent()[0].sectionRowIndex ;
+</script>
 <script src="<c:url value="/resources/js/bootstrap.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.bundle.js" />"></script>
 <script src="<c:url value="/resources/js/bootstrap.esm.js" />"></script>

@@ -1,14 +1,12 @@
 package com.vanthan.vn.controller;
 
-import com.vanthan.vn.dto.AddCustomerRequest;
-import com.vanthan.vn.dto.BaseResponse;
-import com.vanthan.vn.dto.GetUserRequest;
-import com.vanthan.vn.dto.UserResponse;
+import com.vanthan.vn.dto.*;
 import com.vanthan.vn.service.IUser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -29,21 +27,32 @@ public class UserController extends AbtractController{
     @GetMapping("user")
     public String user(HttpServletRequest request, Model model){
 
+        String pageNum = request.getParameter("pageNum");
+        String keyword = request.getParameter("keyword");
+
+        if(pageNum == null){
+            pageNum = "0";
+        }
+
+        if(keyword == null){
+            keyword = "";
+        }
+
         // call api getCustomer
         GetUserRequest getUserRequest = new GetUserRequest();
-        getUserRequest.setPageNum(0);
-        getUserRequest.setTotalNum(10);
+        getUserRequest.setPageNum(Integer.valueOf(pageNum));
+        getUserRequest.setTotalNum(5);
         String token = saveToken.get("token");
-        BaseResponse<UserResponse> response = iUser.getUser(getUserRequest, token);
+        BaseResponse<UserResponse> response = iUser.getUser(keyword, getUserRequest, token);
 
         model.addAttribute("userPage", response.getBody().getContent());
         int totalPages = response.getBody().getTotalPages();
-        if (totalPages > 0) {
-            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
-                    .boxed()
-                    .collect(Collectors.toList());
-            model.addAttribute("pageNumbers", pageNumbers);
-        }
+
+        request.setAttribute("endP", response.getBody().getTotalPages());
+        request.setAttribute("totalElements", response.getBody().getTotalElements());
+        request.setAttribute("tag", pageNum);
+        request.setAttribute("totalNum", 5);
+        request.setAttribute("keyword", keyword);
 
         return "user/user";
     }
@@ -95,5 +104,18 @@ public class UserController extends AbtractController{
             redirectAttributes.addFlashAttribute("message","Thanh Công");
         }
         return redirectView;
+    }
+
+    @PostMapping(value ="edit-user")
+    public String editNewProduct(UserItem userItem, Model model, HttpServletRequest request){
+
+        userItem.setId(Integer.valueOf(request.getParameter("id")));
+        userItem.setUserName(request.getParameter("userName"));
+        userItem.setEmail(request.getParameter("email"));
+        userItem.setAge(request.getParameter("age"));
+
+        iUser.editUser(userItem ,saveToken.get("token"));
+
+        return "redirect:/user";
     }
 }
